@@ -1,0 +1,56 @@
+typedef struct {
+    int sock_id;
+    char IP[16];
+    int port;
+    int sock_errno;
+} SOCK_INFO;
+
+typedef struct {
+        int sent_notack[16];-which are sent but not acknowledged
+        int window_size;
+        int front;
+        int rear;
+        time_t last_ACK_time;-last active time
+        // double last_send_time;
+        int rcv_ws_des_sock;-window size of reciver window
+} send_window;
+
+typedef struct {
+    // int seq_expected[16];
+    int window_size;
+    int front;
+    int rear;
+    int last_seqno_recv;-to send duplicate ack
+    // int expected_seqnos[5];
+    int nxt_expected_seqno;
+    // int nxt_seqno_to_be_taken_out_from_buffer;
+    int nospace;-set when there is no space
+    char last_ack_seqno[5];
+    
+} recieve_window;
+
+typedef struct{
+    int is_free;
+    int flag;
+    int seq_no;
+    int sendbuf_front;-front pointer of send buffer in which data is tgeer
+    int sendbuf_rear;-same but rear upto which the data is there
+    int recvbuf_front;-same as send buffer
+    int recvbuf_rear;
+    int process_id;
+    int sock_id;
+    char dest_ip[16];
+    int dest_port;
+    char send_buffer[10][MAX_MESSAGE_SIZE];
+    char recv_buffer[5][MAX_MESSAGE_SIZE];
+    
+    send_window swnd;
+    recieve_window rwnd;
+}mtp_socket_t;
+
+
+is free-to check if the index is free
+seqno-seqno of send message that to be added to the message
+
+
+//there is no time to check with different probabilities but our code is transfering everything we sent from user1
